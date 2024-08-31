@@ -1,9 +1,6 @@
 import PySimpleGUI as sg
 
 
-imagem = "download.png"
-
-
 # Criação da janela sistema
 def janelasys():
     layoutsys = [
