@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from Telasys import janelasys
-
+#
 
 # Criação da tela de login
 layoutlog = [
