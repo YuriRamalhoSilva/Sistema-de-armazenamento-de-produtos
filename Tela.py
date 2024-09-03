@@ -1,19 +1,5 @@
 import PySimpleGUI as sg
-
-
-# Criação da janela sistema
-def janelasys():
-    layoutsys = [
-        [sg.Text("Cadastro de Produtos!")],
-        [sg.Input(key="Nome"), sg.Text("Nome")],
-        [sg.Input(key="Quant"), sg.Text("Quantidade")],
-        [sg.Input(key="Preco"), sg.Text("Preço")],
-        [sg.Button("Inserir Produto")],
-        [sg.Listbox(values=[], size=(80, 23), key="lista", enable_events=True)],
-        [sg.Button("Deslogar")],
-        [sg.Button("Auto-Insert")],
-    ]
-    return sg.Window("System", layoutsys, size=(600, 620), location=(400, 50))
+from Telasys import janelasys
 
 
 # Criação da tela de login
@@ -41,12 +27,13 @@ while True:
         janela2 = janelasys()
         janela1["Login"].update("")
         janela1["Senha"].update("")
+        janela1.hide()
 
         # Loop da Tela sys
         while True:
             evento2, valores2 = janela2.read()
             if evento2 == "Inserir Produto":
-                produto = valores2["Nome"], ["Quant"], ["Preco"]
+                produto = (valores2["Nome"], valores2["Quant"], valores2["Preco"])
 
                 if produto:
                     produtos.append(produto)
@@ -63,5 +50,6 @@ while True:
                 break
             if evento2 == "Deslogar":
                 janela2.close()
+                janela1.un_hide()
                 break
 janela1.close()
