@@ -1,12 +1,17 @@
 import PySimpleGUI as sg  # Importação da biblioteca de interface e apelidando de sg
 
+# TELA LOGAR vvvvv
 
-def TelaLogin():  # metodo de funcionamento do login e sua interface
+
+def TelaLogin():
+
     layout = [
         [sg.Text("Faça seu Login!")],
-        [sg.Text("LOGIN "), sg.Input(key="Login", size=(30))],
+        [sg.Text("LOGIN "), sg.Input(key="Email", size=(30))],
         [sg.Text("SENHA"), sg.Input(key="Senha", password_char="*", size=(30))],
         [sg.Button("Logar"), sg.Button("Sair")],
+        [sg.Text("Ainda não está cadastrado?")],
+        [sg.Button("Cadastre-se")],
     ]
     janelalog = sg.Window("LOGAR", layout)
 
@@ -18,16 +23,45 @@ def TelaLogin():  # metodo de funcionamento do login e sua interface
             return None
 
         if evento == "Logar":
-            user = valores["Login"]
+            user = valores["Email"]
             senha = valores["Senha"]
             # AUTENTICAÇAO DE LOGIN E SENHA#
             if user == "yuri" and senha == "6767":
                 janelalog.close()
-                return True  # Retorna True para abrir a telaSys
+                return "Logar"  # Retorna True para abrir a telaSys
+
+        if evento == "Cadastre-se":
+            janelalog.close()
+            return "Cadastre-se"
 
 
-# Função para criar a tela de cadastro de produtos
-def TelaSys():  # metodo de funcionamento da Inserção de produtos e sua interface
+# TELA CADASTRO USUARIO vvvvv
+
+
+def TelaCadUser():
+    layout = [
+        [sg.Text("Coloque seu email e senha!")],
+        [sg.Text("Email ")],
+        [sg.Input(key="Email")],
+        [sg.Text("Senha ")],
+        [sg.Input(key="Senha")],
+        [sg.Button("Cadastrar")],
+        [sg.Button("Voltar")],
+    ]
+    janelaCadUser = sg.Window("CADASTRO USUARIO", layout)
+
+    while True:
+        evento, valores = janelaCadUser.read()
+
+        if evento in (sg.WIN_CLOSED, "Voltar"):
+            janelaCadUser.close()
+            return "Voltar"
+
+
+# TELA CADASTRO PRODUTO vvvvv
+
+
+def TelaSys():  # Método de funcionamento da Inserção de produtos e sua interface
     layout = [
         [sg.Text("Cadastro de Produtos!")],
         [sg.Input(key="Nome"), sg.Text("Nome")],
@@ -67,12 +101,16 @@ def TelaSys():  # metodo de funcionamento da Inserção de produtos e sua interf
 # Loop principal
 if __name__ == "__main__":
     while True:
-        if (
-            TelaLogin()
-        ):  # Lógica para voltar para a tela de login ao clicar em "Deslogar"
-            resposta = (
-                TelaSys()
-            )  # Atribuindo a ação de deslogar para a variável resposta
-            if resposta == "Deslogar":
+        resp1 = TelaLogin()
+        if resp1 == "Cadastre-se":
+            resp2 = TelaCadUser()
+            if resp2 == "Voltar":
+                continue
+
+        if resp1 == "Logar":
+            # Lógica para voltar para a tela de login ao clicar em "Deslogar"
+            resp3 = TelaSys()  # Atribuindo a ação de deslogar para a variável resposta
+            if resp3 == "Deslogar":
                 continue  # "CONTINUE" para voltar para o começo do while
+
         break
