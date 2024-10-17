@@ -16,5 +16,12 @@ class user:
     def set_senha(self, senha):
         self.__senha = senha
 
+    def Val_Login(self, email, senha):
+        if email == self.__email and senha == self.__senha:
+            return True
 
-# --------------------- FAZER A VALIDAÇÃO ------------------------------------#
+        return False
+
+    def retorna_user(self):
+
+        return (self.__email, self.__senha)

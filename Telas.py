@@ -1,4 +1,5 @@
 import PySimpleGUI as sg  # Importação da biblioteca de interface e apelidando de sg
+import Sistema
 
 # TELA LOGAR vvvvv
 
@@ -44,7 +45,9 @@ def TelaCadUser():
         [sg.Text("Email ")],
         [sg.Input(key="Email")],
         [sg.Text("Senha ")],
-        [sg.Input(key="Senha")],
+        [sg.Input(key="Senha", password_char="*")],
+        [sg.Text("Confirme sua senha")],
+        [sg.Input(key="confsenha", password_char="*")],
         [sg.Button("Cadastrar")],
         [sg.Button("Voltar")],
     ]
@@ -56,6 +59,22 @@ def TelaCadUser():
         if evento in (sg.WIN_CLOSED, "Voltar"):
             janelaCadUser.close()
             return "Voltar"
+
+        if evento == "Cadastrar":
+            email = valores["Email"]
+            senha = valores["Senha"]
+            confsenha = valores["confsenha"]
+            if senha != confsenha:
+                sg.popup("Erro", "A con firmação da senha não foi validada!")
+            else:
+                retorno = Sistema.Sistema.Cad_User(email, senha)
+
+                if retorno == "sememailousenha":
+                    sg.popup("Erro", "Erro ao Cadastrar, digite seu usuário e senha!")
+                elif retorno == "emailinvalido":
+                    sg.popup("Erro", "O email digitado não é válido!")
+                else:
+                    sg.popup("Cadastro Concluído!", "Usuário cadastrado com sucesso!")
 
 
 # TELA CADASTRO PRODUTO vvvvv
