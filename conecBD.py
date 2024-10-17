@@ -25,14 +25,14 @@ class conecBD:
 
             self.conexao.commit()
             print("Conectou e inseriu o usuário com sucesso!")
-            return True
+            return (True, None)
 
         except mysql.connector.Error as err:
             print(f"Erro: {err}")
-            return False
+            return (False, err)
 
         finally:
-            print("Deu")
+            print("fim")
 
     def deletar_User(self, email):
 
@@ -81,7 +81,7 @@ class conecBD:
         except mysql.connector.Error as err:
             print(f"Erro ao encontrar usuário: {err}")
         finally:
-            print("Deu")
+            print(f"O usuario {email} foi encontrado no banco e retornado ao programa!")
 
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário

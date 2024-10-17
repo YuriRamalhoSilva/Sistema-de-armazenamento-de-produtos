@@ -11,14 +11,19 @@ class Sistema:
 
     def Cad_User(email, senha):
         if email == "" or senha == "":
-            return "sememailousenha"
+            return ("sememailousenha", None)
         elif Sistema.Val_Email(email) == False:
-            return "emailinvalido"
+            return ("emailinvalido", None)
         else:
             novo_user = userprod.User.user(email, senha)
             v1, v2 = novo_user.retorna_user()
             conexao1 = conecBD.conecBD()
-            conexao1.inserir_User(v1, v2)
+
+            insertsuceful, erro = conexao1.inserir_User(v1, v2)
+
+            if not insertsuceful:
+                return ("errobanco", erro)
+
             conexao1.fechar_conexao()
 
     def Del_User(email):

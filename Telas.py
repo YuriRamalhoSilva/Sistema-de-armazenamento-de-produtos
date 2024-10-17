@@ -65,14 +65,16 @@ def TelaCadUser():
             senha = valores["Senha"]
             confsenha = valores["confsenha"]
             if senha != confsenha:
-                sg.popup("Erro", "A con firmação da senha não foi validada!")
+                sg.popup("Erro", "A confirmação da senha não foi validada!")
             else:
-                retorno = Sistema.Sistema.Cad_User(email, senha)
+                retorno, erro = Sistema.Sistema.Cad_User(email, senha)
 
                 if retorno == "sememailousenha":
                     sg.popup("Erro", "Erro ao Cadastrar, digite seu usuário e senha!")
                 elif retorno == "emailinvalido":
                     sg.popup("Erro", "O email digitado não é válido!")
+                elif retorno == "errobanco":
+                    sg.popup("Erro", erro)
                 else:
                     sg.popup("Cadastro Concluído!", "Usuário cadastrado com sucesso!")
 
