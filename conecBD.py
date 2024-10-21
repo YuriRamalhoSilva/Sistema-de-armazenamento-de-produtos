@@ -9,6 +9,20 @@ class conecBD:
         )
         self.cursor1 = self.conexao.cursor()
 
+    def Verificar_email_cadastrado(self, email):
+        try:
+
+            sql = "SELECT email FROM Table_Users WHERE email = %s"
+            self.cursor1.execute(sql, (email,))
+            resultado = self.cursor1.fetchone()
+            if resultado:
+                return True  # E-mail já existe
+            else:
+                return False  # E-mail não existe
+        except mysql.connector.Error as err:
+            print(f"Erro ao verificar email: {err}")
+            return None
+
     def inserir_User(self, email, senha):
         try:
 
@@ -25,14 +39,10 @@ class conecBD:
 
             self.conexao.commit()
             print("Conectou e inseriu o usuário com sucesso!")
-            return (True, None)
 
         except mysql.connector.Error as err:
             print(f"Erro: {err}")
-            return (False, err)
-
-        finally:
-            print("fim")
+            return False
 
     def deletar_User(self, email):
 
@@ -57,8 +67,6 @@ class conecBD:
 
         except mysql.connector.Error as err:
             print(err)
-        finally:
-            print("Deu")
 
     def buscar_User(self, email):
         try:
@@ -80,8 +88,6 @@ class conecBD:
                 return dados
         except mysql.connector.Error as err:
             print(f"Erro ao encontrar usuário: {err}")
-        finally:
-            print(f"O usuario {email} foi encontrado no banco e retornado ao programa!")
 
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário

@@ -10,19 +10,21 @@ class Sistema:
     # USUARIOS
 
     def Cad_User(email, senha):
+        conexao1 = conecBD.conecBD()
+        jacad = conexao1.Verificar_email_cadastrado(email)
+        conexao1.fechar_conexao()
         if email == "" or senha == "":
-            return ("sememailousenha", None)
-        elif Sistema.Val_Email(email) == False:
-            return ("emailinvalido", None)
+            return "sememailousenha"
+        elif not Sistema.Val_Email(email):
+            return "emailinvalido"
+        elif jacad:
+            return "emailjaexiste"
         else:
             novo_user = userprod.User.user(email, senha)
             v1, v2 = novo_user.retorna_user()
             conexao1 = conecBD.conecBD()
 
-            insertsuceful, erro = conexao1.inserir_User(v1, v2)
-
-            if not insertsuceful:
-                return ("errobanco", erro)
+            conexao1.inserir_User(v1, v2)
 
             conexao1.fechar_conexao()
 
