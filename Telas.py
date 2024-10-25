@@ -83,13 +83,15 @@ def TelaCadUser():
 
 
 def TelaSys():  # Método de funcionamento da Inserção de produtos e sua interface
+    
     layout = [
         [sg.Text("Cadastro de Produtos!")],
-        [sg.Input(key="Nome"), sg.Text("Nome")],
-        [sg.Input(key="Quant"), sg.Text("Quantidade")],
-        [sg.Input(key="Preco"), sg.Text("Preço")],
+        [ sg.Column([[sg.Text("Nome"),sg.Input(key="Nome")]], pad=(55,0))],
+        [ sg.Column([[sg.Text("Quantidade"),sg.Input(key="Quant")]], pad=(23,0))],
+        [ sg.Column([[sg.Text("Preço"),sg.Input(key="Preco")]], pad=(55,0))],
         [sg.Button("Inserir Produto")],
-        [sg.Listbox(values=[], size=(80, 23), key="lista", enable_events=True)],
+        [sg.Table(auto_size_columns=False,
+            values=[],headings=["NOME","QUANTIDADE","PREÇO"],row_height=20,justification='center',num_rows=19,col_widths=[20,20,20], key="tabela", enable_events=True)],
         [sg.Button("Deslogar")],
         [sg.Button("Auto-Insert")],
     ]
@@ -110,7 +112,7 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             if produto:
                 produtos.append(produto)
 
-                janelasys["lista"].update(produtos)
+                janelasys["tabela"].update(produtos)
                 janelasys["Nome"].update("")
                 janelasys["Quant"].update("")
                 janelasys["Preco"].update("")

@@ -21,7 +21,7 @@ class conecBD:
                 return False  # E-mail não existe
         except mysql.connector.Error as err:
             print(f"Erro ao verificar email: {err}")
-            return None
+            
 
     def inserir_User(self, email, senha):
         try:
