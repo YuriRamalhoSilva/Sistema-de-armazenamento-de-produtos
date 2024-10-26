@@ -27,16 +27,23 @@ def TelaLogin():
             user = valores["Email"]
             senha = valores["Senha"]
             # AUTENTICAÇAO DE LOGIN E SENHA#
-            retorno = Sistema.Sistema.Aut_Log(user,senha)
+            retorno = Sistema.Sistema.Aut_Log(user, senha)
             if retorno == "liberado":
 
                 janelalog.close()
-                return "Logar" 
+                return "Logar"
             elif retorno == "negado":
-                sg.popup("Acesso Negado!","A senha está incorreta!")
+                sg.popup("Acesso Negado!", "A senha está incorreta!")
             elif retorno == "emailinex":
-                sg.popup("Erro!","Email não cadastrado no sistema!")
-                 
+                sg.popup(
+                    "Erro!",
+                    "Não foi possivel encontrar um usuário com esse email cadastrado no sistema!",
+                )
+            elif retorno == "emailinv":
+                sg.popup(
+                    "Erro!",
+                    "Digite um email válido!\nExemplo: emailexemplo@exemplo.com",
+                )
 
         if evento == "Cadastre-se":
             janelalog.close()
@@ -90,15 +97,26 @@ def TelaCadUser():
 
 
 def TelaSys():  # Método de funcionamento da Inserção de produtos e sua interface
-    
+
     layout = [
         [sg.Text("Cadastro de Produtos!")],
-        [ sg.Column([[sg.Text("Nome"),sg.Input(key="Nome")]], pad=(55,0))],
-        [ sg.Column([[sg.Text("Preço"),sg.Input(key="Preco")]], pad=(55,0))],
-        [ sg.Column([[sg.Text("Quantidade"),sg.Input(key="Quant")]], pad=(23,0))],
+        [sg.Column([[sg.Text("Nome"), sg.Input(key="Nome")]], pad=(55, 0))],
+        [sg.Column([[sg.Text("Preço"), sg.Input(key="Preco")]], pad=(55, 0))],
+        [sg.Column([[sg.Text("Quantidade"), sg.Input(key="Quant")]], pad=(23, 0))],
         [sg.Button("Inserir Produto")],
-        [sg.Table(auto_size_columns=False,
-            values=[],headings=["NOME","QUANTIDADE","PREÇO"],row_height=20,justification='center',num_rows=19,col_widths=[20,20,20], key="tabela", enable_events=True)],
+        [
+            sg.Table(
+                auto_size_columns=False,
+                values=[],
+                headings=["NOME", "QUANTIDADE", "PREÇO"],
+                row_height=20,
+                justification="center",
+                num_rows=19,
+                col_widths=[20, 20, 20],
+                key="tabela",
+                enable_events=True,
+            )
+        ],
         [sg.Button("Deslogar")],
         [sg.Button("Auto-Insert")],
     ]
