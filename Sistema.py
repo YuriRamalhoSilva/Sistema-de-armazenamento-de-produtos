@@ -31,10 +31,21 @@ class Sistema:
     def Del_User(email):
         conecBD.conecBD.deletar_User(email)
 
-    def Ler_User():
+    def Aut_Log(email,senha):
+        conexao = conecBD.conecBD()
+        if conexao.Verificar_email_cadastrado(email):
+            
+            if conexao.Autenticar_User(email,senha):
+                
+                print("Acesso Liberado!")
+                return "liberado"
+            else:
+                print("Acesso Negado!")
+                return "negado"
+        else:
+            print("Email não cadastrado!")
+            return "emailinex"
 
-        # parei aki -----------------
-        pass
 
     def Val_Email(email):
         regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
@@ -56,3 +67,5 @@ class Sistema:
 
     def Del_Prod():
         pass
+
+Sistema.Aut_Log('emailexemplo@gmail.com', 'senhaexemplo123')

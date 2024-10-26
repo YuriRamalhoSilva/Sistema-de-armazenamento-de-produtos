@@ -68,24 +68,31 @@ class conecBD:
         except mysql.connector.Error as err:
             print(err)
 
-    def buscar_User(self, email):
+    def Autenticar_User(self, email,senha):
         try:
-
+            if self.conexao.is_connected():
+             self.cursor1= self.conexao.cursor(dictionary=True)
+            
             valores = (email,)
-
             sql = "SELECT email,senha FROM table_users WHERE email = %s;"
+           
             if self.conexao.is_connected():
                 print("Conectou")
             else:
                 print("Não Conectou")
+            
             self.cursor1.execute(sql, valores)
 
-            dados = self.cursor1.fetchall()
-            if dados == []:
-                print("Erro, usuário não existe!")
+            dados = self.cursor1.fetchone()
+           
+            if dados and dados['senha'] == senha:
+                return True
             else:
-                print(dados)
-                return dados
+                return False
+            
+           
+                
+                
         except mysql.connector.Error as err:
             print(f"Erro ao encontrar usuário: {err}")
 

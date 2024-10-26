@@ -27,9 +27,16 @@ def TelaLogin():
             user = valores["Email"]
             senha = valores["Senha"]
             # AUTENTICAÇAO DE LOGIN E SENHA#
-            if user == "yuri" and senha == "6767":
+            retorno = Sistema.Sistema.Aut_Log(user,senha)
+            if retorno == "liberado":
+
                 janelalog.close()
-                return "Logar"  # Retorna True para abrir a telaSys
+                return "Logar" 
+            elif retorno == "negado":
+                sg.popup("Acesso Negado!","A senha está incorreta!")
+            elif retorno == "emailinex":
+                sg.popup("Erro!","Email não cadastrado no sistema!")
+                 
 
         if evento == "Cadastre-se":
             janelalog.close()
@@ -87,8 +94,8 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
     layout = [
         [sg.Text("Cadastro de Produtos!")],
         [ sg.Column([[sg.Text("Nome"),sg.Input(key="Nome")]], pad=(55,0))],
-        [ sg.Column([[sg.Text("Quantidade"),sg.Input(key="Quant")]], pad=(23,0))],
         [ sg.Column([[sg.Text("Preço"),sg.Input(key="Preco")]], pad=(55,0))],
+        [ sg.Column([[sg.Text("Quantidade"),sg.Input(key="Quant")]], pad=(23,0))],
         [sg.Button("Inserir Produto")],
         [sg.Table(auto_size_columns=False,
             values=[],headings=["NOME","QUANTIDADE","PREÇO"],row_height=20,justification='center',num_rows=19,col_widths=[20,20,20], key="tabela", enable_events=True)],
