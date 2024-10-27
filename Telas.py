@@ -8,8 +8,22 @@ def TelaLogin():
 
     layout = [
         [sg.Text("Faça seu Login!")],
-        [sg.Text("LOGIN "), sg.Input(key="Email", size=(30))],
-        [sg.Text("SENHA"), sg.Input(key="Senha", password_char="*", size=(30))],
+        [
+            sg.Column(
+                [[sg.Text("LOGIN "), sg.Input(key="Email", size=(30))]], pad=(20, 0)
+            )
+        ],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Text("SENHA"),
+                        sg.Input(key="Senha", password_char="*", size=(30)),
+                    ]
+                ],
+                pad=(18, 0),
+            )
+        ],
         [sg.Button("Logar"), sg.Button("Sair")],
         [sg.Text("Ainda não está cadastrado?")],
         [sg.Button("Cadastre-se")],
@@ -115,6 +129,8 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
                 col_widths=[20, 20, 20],
                 key="tabela",
                 enable_events=True,
+                background_color="white",
+                text_color="black",
             )
         ],
         [sg.Button("Deslogar")],
