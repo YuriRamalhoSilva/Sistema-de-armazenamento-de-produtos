@@ -72,4 +72,4 @@ class Sistema:
         pass
 
 
-Sistema.Aut_Log("emailexemplo@gmail.com", "senhaexemplo123")
+
