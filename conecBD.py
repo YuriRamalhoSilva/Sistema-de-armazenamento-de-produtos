@@ -9,6 +9,8 @@ class conecBD:
         )
         self.cursor1 = self.conexao.cursor()
 
+    #USUARIOS
+
     def Verificar_email_cadastrado(self, email):
         try:
 
@@ -22,7 +24,6 @@ class conecBD:
         except mysql.connector.Error as err:
             print(f"Erro ao verificar email: {err}")
             
-
     def inserir_User(self, email, senha):
         try:
 
@@ -89,12 +90,33 @@ class conecBD:
                 return True
             else:
                 return False
-            
-           
-                
+        
                 
         except mysql.connector.Error as err:
             print(f"Erro ao encontrar usuário: {err}")
+
+    #PRODUTOS
+
+    def Cadastrar_Prod(self,nome,quant,preco):
+        try:
+            valores = (nome,quant,preco)
+
+            sql = 'Insert into table_products (nome,quantidade,preco) values (%s,%s,%s)'
+            self.cursor1.execute(sql,valores)
+
+            if self.conexao.is_connected():
+                print("Conectou!")
+            else:
+                print("Não Conectou!")
+
+            self.conexao.commit()
+            print("Dados do produto foram inseridos!")
+            
+        except mysql.connector.Error as err:
+            print(f"Erro: {err}")
+            return False
+        
+        
 
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário

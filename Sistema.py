@@ -21,10 +21,13 @@ class Sistema:
             return "emailjaexiste"
         else:
             novo_user = userprod.User.user(email, senha)
-            v1, v2 = novo_user.retorna_user()
+            
+            senhau = novo_user.get_senha()
+            emailu = novo_user.get_email()
+            
             conexao1 = conecBD.conecBD()
 
-            conexao1.inserir_User(v1, v2)
+            conexao1.inserir_User(senhau, emailu)
 
             conexao1.fechar_conexao()
 
@@ -59,7 +62,20 @@ class Sistema:
 
     # PRODUTOS
 
-    def Cad_Prod():
+    def Cad_Prod(nome,quant,preco):
+        if not nome.strip():
+            return "nomevazio"
+        elif not quant.strip():
+            return "quantvazio"
+        elif not preco.strip():
+            return "precovazio"
+        else:
+            conexao = conecBD.conecBD()
+            
+
+            #### parei aki
+        
+
         pass
 
     def Alt_Prod():
