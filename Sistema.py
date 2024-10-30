@@ -21,10 +21,10 @@ class Sistema:
             return "emailjaexiste"
         else:
             novo_user = userprod.User.user(email, senha)
-            
+
             senhau = novo_user.get_senha()
             emailu = novo_user.get_email()
-            
+
             conexao1 = conecBD.conecBD()
 
             conexao1.inserir_User(senhau, emailu)
@@ -62,7 +62,7 @@ class Sistema:
 
     # PRODUTOS
 
-    def Cad_Prod(nome,quant,preco):
+    def Cad_Prod(nome, quant, preco):
         if not nome.strip():
             return "nomevazio"
         elif not quant.strip():
@@ -70,15 +70,16 @@ class Sistema:
         elif not preco.strip():
             return "precovazio"
         else:
-            novo_produto = userprod.Produto.Produto(nome,quant,preco)
-            nomep = novo_produto.get_nome()
-            quantp = novo_produto.get_quant()
-            precop = novo_produto.get_preco()0
-            conexao = conecBD.conecBD()
-            conexao.Cadastrar_Prod(nomep,quantp,precop)
-            conexao.fechar_conexao()
-            
-        
+            novo_produto = userprod.Produto.Produto(nome, quant, preco)
+            if novo_produto:
+                nomep = novo_produto.get_nome()
+                quantp = novo_produto.get_quant()
+                precop = novo_produto.get_preco()
+                conexao = conecBD.conecBD()
+                conexao.Cadastrar_Prod(nomep, quantp, precop)
+                conexao.fechar_conexao()
+            else:
+                print("Erro")
 
         pass
 
@@ -90,6 +91,3 @@ class Sistema:
 
     def Del_Prod():
         pass
-
-
-

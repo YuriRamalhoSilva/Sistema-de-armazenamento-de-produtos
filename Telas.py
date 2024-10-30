@@ -114,9 +114,24 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
 
     layout = [
         [sg.Text("Cadastro de Produtos!")],
-        [sg.Column([[sg.Text("Nome"), sg.Input(key="Nome")]], pad=(55, 0))],
-        [sg.Column([[sg.Text("Preço"), sg.Input(key="Preco")]], pad=(55, 0))],
-        [sg.Column([[sg.Text("Quantidade"), sg.Input(key="Quant")]], pad=(23, 0))],
+        [
+            sg.Column(
+                [[sg.Text("Nome"), sg.Input(key="Nome", enable_events=True)]],
+                pad=(55, 0),
+            )
+        ],
+        [
+            sg.Column(
+                [[sg.Text("Preço"), sg.Input(key="Preco", enable_events=True)]],
+                pad=(55, 0),
+            )
+        ],
+        [
+            sg.Column(
+                [[sg.Text("Quantidade"), sg.Input(key="Quant", enable_events=True)]],
+                pad=(23, 0),
+            )
+        ],
         [sg.Button("Inserir Produto")],
         [
             sg.Table(
@@ -147,11 +162,34 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             janelasys.close()
             return None
 
+        if evento == "Preco":
+            digitado = valores["Preco"]
+            if not (
+                digitado.replace(",", ".", 1).isdigit()
+                and digitado.count(",") <= 1
+                and digitado.count(".") <= 1
+            ):
+                janelasys["Preco"].update(digitado[:-1])
+
+        if evento == "Quant":
+            digitado = valores["Quant"]
+            if not digitado.isdigit():
+                janelasys["Quant"].update(digitado[:-1])
+
         if evento == "Inserir Produto":
-            retorno = Sistema.Sistema.Cad_Prod(valores["Nome"], valores["Quant"], valores["Preco"])
-            if retorno == "nomevazio" or retorno == "precovazio" or retorno == "quantvazio":
-                sg.popup("Erro","Não foi possivel cadastrar um produto,\nnão deixe nenhum campo vazio!")
-            
+            retorno = Sistema.Sistema.Cad_Prod(
+                valores["Nome"], valores["Quant"], valores["Preco"]
+            )
+            if (
+                retorno == "nomevazio"
+                or retorno == "precovazio"
+                or retorno == "quantvazio"
+            ):
+                sg.popup(
+                    "Erro",
+                    "Não foi possivel cadastrar um produto,\nnão deixe nenhum campo vazio!",
+                )
+
         elif evento == "Deslogar":
             janelasys.close()
             return "Deslogar"
