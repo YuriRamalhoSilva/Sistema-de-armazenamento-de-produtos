@@ -148,15 +148,10 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             return None
 
         if evento == "Inserir Produto":
-            produto = (valores["Nome"], valores["Quant"], valores["Preco"])
-
-            if produto:
-                produtos.append(produto)
-
-                janelasys["tabela"].update(produtos)
-                janelasys["Nome"].update("")
-                janelasys["Quant"].update("")
-                janelasys["Preco"].update("")
+            retorno = Sistema.Sistema.Cad_Prod(valores["Nome"], valores["Quant"], valores["Preco"])
+            if retorno == "nomevazio" or retorno == "precovazio" or retorno == "quantvazio":
+                sg.popup("Erro","Não foi possivel cadastrar um produto,\nnão deixe nenhum campo vazio!")
+            
         elif evento == "Deslogar":
             janelasys.close()
             return "Deslogar"

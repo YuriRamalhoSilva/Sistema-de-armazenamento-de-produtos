@@ -70,10 +70,14 @@ class Sistema:
         elif not preco.strip():
             return "precovazio"
         else:
+            novo_produto = userprod.Produto.Produto(nome,quant,preco)
+            nomep = novo_produto.get_nome()
+            quantp = novo_produto.get_quant()
+            precop = novo_produto.get_preco()0
             conexao = conecBD.conecBD()
+            conexao.Cadastrar_Prod(nomep,quantp,precop)
+            conexao.fechar_conexao()
             
-
-            #### parei aki
         
 
         pass
