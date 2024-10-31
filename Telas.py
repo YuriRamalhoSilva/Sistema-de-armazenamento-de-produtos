@@ -165,7 +165,7 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
         if evento == "Preco":
             digitado = valores["Preco"]
             if not (
-                digitado.replace(",", ".", 1).isdigit()
+                digitado.replace(",", "", 1).replace(".", "", 1).isdigit()
                 and digitado.count(",") <= 1
                 and digitado.count(".") <= 1
             ):
