@@ -62,11 +62,11 @@ def TelaLogin():  # Função de funcionamento da interface de login
                 popup_custom("Acesso Negado!\nA senha está incorreta!")
             elif retorno == "emailinex":
                 popup_custom(
-                    "Erro!\nNão foi possivel encontrar um usuário com esse email cadastrado no sistema!"
+                    "Erro!\nNão foi possivel encontrar um usuário com esse E-mail cadastrado no sistema!"
                 )
             elif retorno == "emailinv":
                 popup_custom(
-                    "Erro!\nDigite um email válido!\nExemplo: emailexemplo@exemplo.com"
+                    "Erro!\nDigite um E-mail válido!\nExemplo: E-mailexemplo@exemplo.com"
                 )
 
         if evento == "Cadastre-se":
@@ -100,18 +100,22 @@ def TelaCadUser():  # Função de funcionamento da interface de cadastro de novo
             senha = valores["Senha"]
             confsenha = valores["confsenha"]
             if senha != confsenha:
-                sg.popup("Erro", "A confirmação da senha não foi validada!")
+                popup_custom("Erro\nA confirmação da senha não foi validada!")
             else:
                 retorno = Sistema.Sistema.Cad_User(email, senha)
 
                 if retorno == "sememailousenha":
-                    sg.popup("Erro", "Erro ao Cadastrar, digite seu usuário e senha!")
+                    popup_custom("Erro\nErro ao Cadastrar, digite seu usuário e senha!")
                 elif retorno == "emailinvalido":
-                    sg.popup("Erro", "O email digitado não é válido!")
+                    popup_custom(
+                        "Erro\nDigite um E-mail válido, por exemplo: E-mailexemplo@exemplo.com"
+                    )
                 elif retorno == "emailjaexiste":
-                    sg.popup("Erro", "Email já cadastrado!")
+                    popup_custom(
+                        "Erro\nUsuário já cadastrado no sistema com esse E-Mail!"
+                    )
                 else:
-                    sg.popup("Cadastro Concluído!", "Usuário cadastrado com sucesso!")
+                    popup_custom("Cadastro Concluído!\nUsuário cadastrado com sucesso!")
 
 
 def TelaSys():  # Função de funcionamento da Inserção de produtos e sua interface
@@ -188,14 +192,13 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 or retorno == "precovazio"
                 or retorno == "quantvazio"
             ):
-                sg.popup(
-                    "Erro",
-                    "Não foi possivel cadastrar um produto!\nNão deixe nenhum campo vazio!",
+                popup_custom(
+                    "Erro\nNão foi possivel cadastrar um produto!\nNão deixe nenhum campo vazio!"
                 )
             else:
                 produtos = Sistema.Sistema.Bus_Prod()
                 janelasys["tabela"].update(produtos)
-                sg.popup("Inserido!", "Produto inserido com sucesso!")
+                popup_custom("Inserido!\nProduto inserido com sucesso!")
                 janelasys["Nome"].update("")
                 janelasys["Quant"].update("")
                 janelasys["Preco"].update("")
@@ -212,6 +215,7 @@ if __name__ == "__main__":
         if resp1 == "Cadastre-se":
             resp2 = TelaCadUser()
             if resp2 == "Voltar":
+
                 continue
 
         if resp1 == "Logar":
