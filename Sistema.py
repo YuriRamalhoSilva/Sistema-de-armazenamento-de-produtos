@@ -27,7 +27,7 @@ class Sistema:
 
             conexao1 = conecBD.conecBD()
 
-            conexao1.inserir_User(senhau, emailu)
+            conexao1.inserir_User(emailu, senhau)
 
             conexao1.fechar_conexao()
 
@@ -78,16 +78,15 @@ class Sistema:
                 conexao = conecBD.conecBD()
                 conexao.Cadastrar_Prod(nomep, quantp, precop)
                 conexao.fechar_conexao()
-            else:
-                print("Erro")
-
-        pass
 
     def Alt_Prod():
         pass
 
-    def Lis_Prod():
-        pass
+    def Bus_Prod():
+        conexao = conecBD.conecBD()
+        produtos = conexao.Buscar_Produtos()
+        conexao.fechar_conexao()
+        return produtos
 
     def Del_Prod():
         pass

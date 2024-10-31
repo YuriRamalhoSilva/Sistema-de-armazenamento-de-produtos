@@ -9,7 +9,7 @@ class conecBD:
         )
         self.cursor1 = self.conexao.cursor()
 
-    #USUARIOS
+    # USUARIOS
 
     def Verificar_email_cadastrado(self, email):
         try:
@@ -23,7 +23,7 @@ class conecBD:
                 return False  # E-mail não existe
         except mysql.connector.Error as err:
             print(f"Erro ao verificar email: {err}")
-            
+
     def inserir_User(self, email, senha):
         try:
 
@@ -69,40 +69,40 @@ class conecBD:
         except mysql.connector.Error as err:
             print(err)
 
-    def Autenticar_User(self, email,senha):
+    def Autenticar_User(self, email, senha):
         try:
             if self.conexao.is_connected():
-             self.cursor1= self.conexao.cursor(dictionary=True)
-            
+                self.cursor1 = self.conexao.cursor(dictionary=True)
+
             valores = (email,)
             sql = "SELECT email,senha FROM table_users WHERE email = %s;"
-           
+
             if self.conexao.is_connected():
                 print("Conectou")
             else:
                 print("Não Conectou")
-            
+
             self.cursor1.execute(sql, valores)
 
             dados = self.cursor1.fetchone()
-           
-            if dados and dados['senha'] == senha:
+
+            if dados and dados["senha"] == senha:
                 return True
             else:
                 return False
-        
-                
+
         except mysql.connector.Error as err:
             print(f"Erro ao encontrar usuário: {err}")
 
-    #PRODUTOS
+    # PRODUTOS
 
-    def Cadastrar_Prod(self,nome,quant,preco):
+    def Cadastrar_Prod(self, nome, quant, preco):
+
         try:
-            valores = (nome,quant,preco)
+            valores = (nome, quant, preco)
 
-            sql = 'Insert into table_products (nome,quantidade,preco) values (%s,%s,%s)'
-            self.cursor1.execute(sql,valores)
+            sql = "Insert into table_products (nome,quantidade,preco) values (%s,%s,%s)"
+            self.cursor1.execute(sql, valores)
 
             if self.conexao.is_connected():
                 print("Conectou!")
@@ -111,12 +111,22 @@ class conecBD:
 
             self.conexao.commit()
             print("Dados do produto foram inseridos!")
-            
+
         except mysql.connector.Error as err:
             print(f"Erro: {err}")
             return False
-        
-        
+
+    def Buscar_Produtos(self):
+        try:
+            sql = "SELECT nome,quantidade,preco FROM table_products"
+
+            self.cursor1.execute(sql)
+
+            print("Os produtos foram encontrados!")
+            busca = self.cursor1.fetchall()
+            return busca
+        except mysql.connector.Error as err:
+            print(err)
 
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário

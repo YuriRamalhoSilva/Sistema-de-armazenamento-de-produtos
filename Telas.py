@@ -24,7 +24,7 @@ def TelaLogin():
                 pad=(18, 0),
             )
         ],
-        [sg.Button("Logar"), sg.Button("Sair")],
+        [sg.Button("Logar", bind_return_key=True), sg.Button("Sair")],
         [sg.Text("Ainda não está cadastrado?")],
         [sg.Button("Cadastre-se")],
     ]
@@ -76,7 +76,7 @@ def TelaCadUser():
         [sg.Input(key="Senha", password_char="*")],
         [sg.Text("Confirme sua senha")],
         [sg.Input(key="confsenha", password_char="*")],
-        [sg.Button("Cadastrar")],
+        [sg.Button("Cadastrar", bind_return_key=True)],
         [sg.Button("Voltar")],
     ]
     janelaCadUser = sg.Window("CADASTRO USUARIO", layout)
@@ -111,6 +111,7 @@ def TelaCadUser():
 
 
 def TelaSys():  # Método de funcionamento da Inserção de produtos e sua interface
+    produtos = Sistema.Sistema.Bus_Prod()
 
     layout = [
         [sg.Text("Cadastro de Produtos!")],
@@ -122,23 +123,24 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
         ],
         [
             sg.Column(
-                [[sg.Text("Preço"), sg.Input(key="Preco", enable_events=True)]],
-                pad=(55, 0),
-            )
-        ],
-        [
-            sg.Column(
                 [[sg.Text("Quantidade"), sg.Input(key="Quant", enable_events=True)]],
                 pad=(23, 0),
             )
         ],
-        [sg.Button("Inserir Produto")],
+        [
+            sg.Column(
+                [[sg.Text("Preço"), sg.Input(key="Preco", enable_events=True)]],
+                pad=(55, 0),
+            )
+        ],
+        [sg.Button("Inserir Produto", bind_return_key=True)],
         [
             sg.Table(
                 auto_size_columns=False,
-                values=[],
+                values=produtos,
                 headings=["NOME", "QUANTIDADE", "PREÇO"],
                 row_height=20,
+                select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                 justification="center",
                 num_rows=19,
                 col_widths=[20, 20, 20],
@@ -153,14 +155,14 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
     ]
     janelasys = sg.Window("Sistema", layout, size=(600, 620), location=(400, 50))
 
-    # vetor de produtos
-    produtos = []
-
     while True:
+
         evento, valores = janelasys.read()
         if evento == sg.WIN_CLOSED:
             janelasys.close()
             return None
+
+        janelasys["tabela"].update(produtos)
 
         if evento == "Preco":
             digitado = valores["Preco"]
@@ -177,9 +179,8 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
                 janelasys["Quant"].update(digitado[:-1])
 
         if evento == "Inserir Produto":
-            retorno = Sistema.Sistema.Cad_Prod(
-                valores["Nome"], valores["Quant"], valores["Preco"]
-            )
+            nome, quant, preco = valores["Nome"], valores["Quant"], valores["Preco"]
+            retorno = Sistema.Sistema.Cad_Prod(nome, quant, preco)
             if (
                 retorno == "nomevazio"
                 or retorno == "precovazio"
@@ -187,8 +188,14 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             ):
                 sg.popup(
                     "Erro",
-                    "Não foi possivel cadastrar um produto,\nnão deixe nenhum campo vazio!",
+                    "Não foi possivel cadastrar um produto!\nNão deixe nenhum campo vazio!",
                 )
+            else:
+                produtos = Sistema.Sistema.Bus_Prod()
+                janelasys["tabela"].update(produtos)
+                janelasys["Nome"].update("")
+                janelasys["Quant"].update("")
+                janelasys["Preco"].update("")
 
         elif evento == "Deslogar":
             janelasys.close()
