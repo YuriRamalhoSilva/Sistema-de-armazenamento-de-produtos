@@ -1,10 +1,22 @@
 import PySimpleGUI as sg  # Importação da biblioteca de interface e apelidando de sg
 import Sistema
 
-# TELA LOGAR vvvvv
+
+def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema todo
+    layout = [[sg.Text(mensagem)], [sg.Button("OK", bind_return_key=True)]]
+
+    popup_window = sg.Window("Atenção!", layout, modal=True, finalize=True)
+    popup_window.bind("<Return>", "_Enter")  # Vincula a tecla Enter ao evento _Enter
+
+    while True:
+        evento, _ = popup_window.read()
+        if evento in (sg.WIN_CLOSED, "OK", "_Enter"):  # Fecha com Enter ou botão OK
+            break
+
+    popup_window.close()
 
 
-def TelaLogin():
+def TelaLogin():  # Função de funcionamento da interface de login
 
     layout = [
         [sg.Text("Faça seu Login!")],
@@ -47,16 +59,14 @@ def TelaLogin():
                 janelalog.close()
                 return "Logar"
             elif retorno == "negado":
-                sg.popup("Acesso Negado!", "A senha está incorreta!")
+                popup_custom("Acesso Negado!\nA senha está incorreta!")
             elif retorno == "emailinex":
-                sg.popup(
-                    "Erro!",
-                    "Não foi possivel encontrar um usuário com esse email cadastrado no sistema!",
+                popup_custom(
+                    "Erro!\nNão foi possivel encontrar um usuário com esse email cadastrado no sistema!"
                 )
             elif retorno == "emailinv":
-                sg.popup(
-                    "Erro!",
-                    "Digite um email válido!\nExemplo: emailexemplo@exemplo.com",
+                popup_custom(
+                    "Erro!\nDigite um email válido!\nExemplo: emailexemplo@exemplo.com"
                 )
 
         if evento == "Cadastre-se":
@@ -64,10 +74,7 @@ def TelaLogin():
             return "Cadastre-se"
 
 
-# TELA CADASTRO USUARIO vvvvv
-
-
-def TelaCadUser():
+def TelaCadUser():  # Função de funcionamento da interface de cadastro de novos usuários
     layout = [
         [sg.Text("Coloque seu email e senha!")],
         [sg.Text("Email ")],
@@ -107,10 +114,7 @@ def TelaCadUser():
                     sg.popup("Cadastro Concluído!", "Usuário cadastrado com sucesso!")
 
 
-# TELA CADASTRO PRODUTO vvvvv
-
-
-def TelaSys():  # Método de funcionamento da Inserção de produtos e sua interface
+def TelaSys():  # Função de funcionamento da Inserção de produtos e sua interface
     produtos = Sistema.Sistema.Bus_Prod()
 
     layout = [
@@ -162,8 +166,6 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             janelasys.close()
             return None
 
-        janelasys["tabela"].update(produtos)
-
         if evento == "Preco":
             digitado = valores["Preco"]
             if not (
@@ -193,6 +195,7 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             else:
                 produtos = Sistema.Sistema.Bus_Prod()
                 janelasys["tabela"].update(produtos)
+                sg.popup("Inserido!", "Produto inserido com sucesso!")
                 janelasys["Nome"].update("")
                 janelasys["Quant"].update("")
                 janelasys["Preco"].update("")
@@ -202,7 +205,7 @@ def TelaSys():  # Método de funcionamento da Inserção de produtos e sua inter
             return "Deslogar"
 
 
-# Loop principal
+# Loop principal que executa as telas em ordem
 if __name__ == "__main__":
     while True:
         resp1 = TelaLogin()
