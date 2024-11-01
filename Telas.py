@@ -16,6 +16,38 @@ def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema
     popup_window.close()
 
 
+def popup_custom_confirm(
+    mensagem,
+):  # Função que atribui uma bind ao popup do sistema todo
+    layout = [
+        [sg.Text(mensagem)],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Button("Sim", bind_return_key=True, size=(5, 1)),
+                        sg.Button("Não", bind_return_key=True, size=(5, 1)),
+                    ]
+                ],
+                justification="center",
+            )
+        ],
+    ]
+
+    popup_window = sg.Window("Atenção!", layout, modal=True, finalize=True)
+    popup_window.bind("<Return>", "_Enter")  # Vincula a tecla Enter ao evento Return
+    popup_window.bind("<Escape>", "_Esc")  # Vincula a tecla Esc ao evento Escape
+
+    while True:
+        evento, _ = popup_window.read()
+        if evento in ("Sim", "_Enter"):
+            popup_window.close()
+            return "Sim"
+        elif evento in ("Não", "_Esc", sg.WIN_CLOSED):
+            popup_window.close()
+            return "Não"
+
+
 def Form_Preco(preco):
     return f"R$  {preco:.2f}"
 
@@ -231,9 +263,23 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 janelasys["Quant"].update("")
                 janelasys["Preco"].update("")
 
+        if evento == "Deletar Produto":
+
+            pass
+
+        if evento == "Editar Produto":
+            pass
+
+        if evento == "Auto-Insert":
+            pass
+
         elif evento == "Deslogar":
-            janelasys.close()
-            return "Deslogar"
+            retorno = popup_custom_confirm("Você tem certeza que quer deslogar?")
+            if retorno == "Sim":
+                janelasys.close()
+                return "Deslogar"
+            elif retorno == "Não":
+                continue
 
 
 # Loop principal que executa as telas em ordem
