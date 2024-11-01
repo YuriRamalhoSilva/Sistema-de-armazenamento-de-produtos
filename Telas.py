@@ -124,6 +124,10 @@ def TelaCadUser():  # Função de funcionamento da interface de cadastro de novo
 
 def TelaSys():  # Função de funcionamento da Inserção de produtos e sua interface
     produtos = Sistema.Sistema.Bus_Prod()
+    res_largura, res_altura = sg.Window.get_screen_size()
+    jan_largura, jan_altura = 600, 620
+    px = (res_largura - jan_largura) // 2
+    py = (res_altura - jan_altura) // 2
 
     layout = [
         [sg.Text("Cadastro de Produtos!")],
@@ -181,7 +185,9 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
         ],
         [sg.Button("Deslogar")],
     ]
-    janelasys = sg.Window("Sistema", layout, size=(600, 620), location=(400, 50))
+    janelasys = sg.Window(
+        "Sistema", layout, size=(jan_largura, jan_altura), location=(px, py)
+    )
 
     while True:
 
