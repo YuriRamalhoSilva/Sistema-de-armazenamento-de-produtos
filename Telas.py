@@ -16,6 +16,10 @@ def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema
     popup_window.close()
 
 
+def Form_Preco(preco):
+    return f"R$  {preco:.2f}"
+
+
 def TelaLogin():  # Função de funcionamento da interface de login
 
     layout = [
@@ -118,9 +122,6 @@ def TelaCadUser():  # Função de funcionamento da interface de cadastro de novo
                     popup_custom("Cadastro Concluído!\nUsuário cadastrado com sucesso!")
 
 
-def Form_Preco(preco):
-    return f"R$  {preco:.2f}"
-
 def TelaSys():  # Função de funcionamento da Inserção de produtos e sua interface
     produtos = Sistema.Sistema.Bus_Prod()
 
@@ -144,26 +145,41 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 pad=(55, 0),
             )
         ],
-        [sg.Column([[sg.Button("Inserir Produto", bind_return_key=True), sg.Button("Deletar Produto"),sg.Button("Editar Produto")]],pad=(20,0))],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Button(
+                            "Inserir Produto", bind_return_key=True, size=(13, 1)
+                        ),
+                        sg.Button("Deletar Produto", size=(13, 1)),
+                        sg.Button("Editar Produto", size=(13, 1)),
+                        sg.Button("Auto-Insert", size=(13, 1)),
+                    ]
+                ],
+                pad=(20, 4),
+                justification="center",
+            )
+        ],
         [
             sg.Table(
                 auto_size_columns=False,
-                values=[[nome,quant,Form_Preco(preco)]for nome,quant,preco in produtos],
+                values=[
+                    [nome, quant, Form_Preco(preco)] for nome, quant, preco in produtos
+                ],
                 headings=["NOME", "QUANTIDADE", "PREÇO"],
                 row_height=20,
                 select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                 justification="center",
-                num_rows=19,
+                num_rows=20,
                 col_widths=[20, 20, 20],
                 key="tabela",
                 enable_events=True,
-
                 background_color="white",
                 text_color="black",
             )
         ],
         [sg.Button("Deslogar")],
-        [sg.Button("Auto-Insert")],
     ]
     janelasys = sg.Window("Sistema", layout, size=(600, 620), location=(400, 50))
 
@@ -201,7 +217,9 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 )
             else:
                 produtos = Sistema.Sistema.Bus_Prod()
-                janelasys["tabela"].update([nome,quant,Form_Preco(preco)]for nome,quant,preco in produtos)
+                janelasys["tabela"].update(
+                    [nome, quant, Form_Preco(preco)] for nome, quant, preco in produtos
+                )
                 popup_custom("Inserido!\nProduto inserido com sucesso!")
                 janelasys["Nome"].update("")
                 janelasys["Quant"].update("")
