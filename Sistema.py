@@ -32,7 +32,8 @@ class Sistema:
             conexao1.fechar_conexao()
 
     def Del_User(email):
-        conecBD.conecBD.deletar_User(email)
+        conexao = conecBD.conecBD()
+        conexao.deletar_User(email)
 
     def Aut_Log(email, senha):
         conexao = conecBD.conecBD()
@@ -88,5 +89,9 @@ class Sistema:
         conexao.fechar_conexao()
         return produtos
 
-    def Del_Prod():
-        pass
+    def Del_Prod(id):
+        conexao = conecBD.conecBD()
+        if conexao.Delete_Produtos(id):
+            return True
+        else:
+            return False

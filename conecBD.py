@@ -118,13 +118,41 @@ class conecBD:
 
     def Buscar_Produtos(self):
         try:
-            sql = "SELECT nome,quantidade,preco FROM table_products"
+            sql = "SELECT ID_produto,nome,quantidade,preco FROM table_products"
 
             self.cursor1.execute(sql)
 
             print("Os produtos foram encontrados!")
             busca = self.cursor1.fetchall()
             return busca
+        except mysql.connector.Error as err:
+            print(err)
+
+    def Delete_Produtos(self, id):
+        try:
+            valores = (id,)
+            sql = "SELECT nome FROM table_products WHERE ID_produto = %s"
+            self.cursor1.execute(sql, valores)
+            prodDel = self.cursor1.fetchone()
+
+            sql = "DELETE FROM table_products WHERE ID_produto = %s"
+
+            self.cursor1.execute(sql, valores)
+
+            if self.conexao.is_connected():
+                print("Conectou")
+            else:
+                print("Não conectou")
+
+            self.conexao.commit()
+
+            if self.cursor1.rowcount > 0:
+                print(f"Produto {prodDel} deletado com sucesso do banco de dados!")
+                return True
+            else:
+                print(f"Produto {prodDel} nao foi encontrado no banco de dados!")
+                return False
+
         except mysql.connector.Error as err:
             print(err)
 

@@ -201,14 +201,15 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
             sg.Table(
                 auto_size_columns=False,
                 values=[
-                    [nome, quant, Form_Preco(preco)] for nome, quant, preco in produtos
+                    [id, nome, quant, Form_Preco(preco)]
+                    for id, nome, quant, preco in produtos
                 ],
-                headings=["NOME", "QUANTIDADE", "PREÇO"],
+                headings=["ID", "NOME", "QUANTIDADE", "PREÇO"],
                 row_height=20,
                 select_mode=sg.TABLE_SELECT_MODE_BROWSE,
                 justification="center",
                 num_rows=20,
-                col_widths=[20, 20, 20],
+                col_widths=[10, 20, 15, 15],
                 key="tabela",
                 enable_events=True,
                 background_color="white",
@@ -256,7 +257,8 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
             else:
                 produtos = Sistema.Sistema.Bus_Prod()
                 janelasys["tabela"].update(
-                    [nome, quant, Form_Preco(preco)] for nome, quant, preco in produtos
+                    [id, nome, quant, Form_Preco(preco)]
+                    for id, nome, quant, preco in produtos
                 )
                 popup_custom("Inserido!\nProduto inserido com sucesso!")
                 janelasys["Nome"].update("")
@@ -264,8 +266,29 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 janelasys["Preco"].update("")
 
         if evento == "Deletar Produto":
+            linhaselec = valores["tabela"]  # Pega a linha selecionada
+            if linhaselec:
+                dadoslinha = produtos[linhaselec[0]]
+                retornopop = popup_custom_confirm(
+                    f"Tem certeza que você quer deletar esse produto?\n{dadoslinha}"
+                )
+                if retornopop == "Sim":
+                    retornosis = Sistema.Sistema.Del_Prod(dadoslinha[0])
+                    if retornosis:
+                        popup_custom(
+                            f"Produto {dadoslinha[1]} foi deletado do sistema!"
+                        )
+                        produtos = Sistema.Sistema.Bus_Prod()
+                        janelasys["tabela"].update(
+                            [id, nome, quant, Form_Preco(preco)]
+                            for id, nome, quant, preco in produtos
+                        )
 
-            pass
+                    elif not retornosis:
+                        popup_custom(f"Produto {dadoslinha[1]} nao foi encontrado!")
+
+                elif retornopop == "Não":
+                    pass
 
         if evento == "Editar Produto":
             pass
