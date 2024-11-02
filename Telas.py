@@ -25,8 +25,8 @@ def popup_custom_confirm(
             sg.Column(
                 [
                     [
-                        sg.Button("Sim", bind_return_key=True, size=(5, 1)),
                         sg.Button("Não", bind_return_key=True, size=(5, 1)),
+                        sg.Button("Sim", bind_return_key=True, size=(5, 1)),
                     ]
                 ],
                 justification="center",
@@ -55,7 +55,7 @@ def Form_Preco(preco):
 def TelaLogin():  # Função de funcionamento da interface de login
 
     layout = [
-        [sg.Text("Faça seu Login!")],
+        [sg.Push(), sg.Text("Faça seu Login!"), sg.Push()],
         [
             sg.Column(
                 [[sg.Text("LOGIN "), sg.Input(key="Email", size=(30))]], pad=(20, 0)
@@ -72,9 +72,13 @@ def TelaLogin():  # Função de funcionamento da interface de login
                 pad=(18, 0),
             )
         ],
-        [sg.Button("Logar", bind_return_key=True), sg.Button("Sair")],
-        [sg.Text("Ainda não está cadastrado?")],
-        [sg.Button("Cadastre-se")],
+        [
+            sg.Text("    "),
+            sg.Button("Logar", bind_return_key=True),
+            sg.Button("Sair"),
+        ],
+        [sg.Push(), sg.Text("Ainda não está cadastrado?")],
+        [sg.Push(), sg.Button("Cadastre-se")],
     ]
     janelalog = sg.Window("LOGAR", layout)
 
@@ -162,7 +166,7 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
     py = (res_altura - jan_altura) // 2
 
     layout = [
-        [sg.Text("Cadastro de Produtos!")],
+        [sg.Push(), sg.Text("Cadastro de Produtos!"), sg.Push()],
         [
             sg.Column(
                 [[sg.Text("Nome"), sg.Input(key="Nome", enable_events=True)]],
@@ -216,7 +220,19 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 text_color="black",
             )
         ],
-        [sg.Button("Deslogar")],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Button("Deslogar"),
+                        sg.Text(
+                            "                                                                                             "
+                        ),
+                        sg.Button("Atualizar Tabela"),
+                    ]
+                ],
+            )
+        ],
     ]
     janelasys = sg.Window(
         "Sistema", layout, size=(jan_largura, jan_altura), location=(px, py)
@@ -296,13 +312,20 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
         if evento == "Auto-Insert":
             pass
 
-        elif evento == "Deslogar":
+        if evento == "Deslogar":
             retorno = popup_custom_confirm("Você tem certeza que quer deslogar?")
             if retorno == "Sim":
                 janelasys.close()
                 return "Deslogar"
             elif retorno == "Não":
                 continue
+
+        if evento == "Atualizar Tabela":
+            produtos = Sistema.Sistema.Bus_Prod()
+            janelasys["tabela"].update(
+                [id, nome, quant, Form_Preco(preco)]
+                for id, nome, quant, preco in produtos
+            )
 
 
 # Loop principal que executa as telas em ordem
