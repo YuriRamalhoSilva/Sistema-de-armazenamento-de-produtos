@@ -123,8 +123,11 @@ def TelaCadUser():  # Função de funcionamento da interface de cadastro de novo
         [sg.Input(key="Senha", password_char="*")],
         [sg.Text("Confirme sua senha")],
         [sg.Input(key="confsenha", password_char="*")],
-        [sg.Button("Cadastrar", bind_return_key=True)],
-        [sg.Button("Voltar")],
+        [
+            sg.Column(
+                [[sg.Button("Cadastrar", bind_return_key=True), sg.Button("Voltar")]]
+            )
+        ],
     ]
     janelaCadUser = sg.Window("CADASTRO USUARIO", layout)
 
