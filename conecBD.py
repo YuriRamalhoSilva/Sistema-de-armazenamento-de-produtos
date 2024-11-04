@@ -156,8 +156,24 @@ class conecBD:
         except mysql.connector.Error as err:
             print(err)
 
-    def Update_Produtos(self, id, nome, quant, preco):
-        pass
+    def Update_Produtos(self, id, NovoNome, NovoQuant, NovoPreco):
+        try:
+            valores = (NovoNome, NovoQuant, NovoPreco, id)
+            sql = "UPDATE table_products SET nome = %s , quantidade = %s , preco = %s WHERE ID_produto = %s"
+
+            self.cursor1.execute(sql, valores)
+
+            if self.conexao.is_connected():
+                print("Conectou!")
+            else:
+                print("Não Conectou!")
+
+            self.conexao.commit()
+            print(f"Dados do produto ({NovoNome}) foram atualizados com Sucesso")
+            return True
+        except mysql.connector.Error as err:
+            print(err)
+            return False
 
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário

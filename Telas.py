@@ -311,7 +311,12 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
             linhaselec = valores["tabela"]  # Pega a linha selecionada
             if linhaselec:
                 dadoslinha = produtos[linhaselec[0]]
-                TelaEditProd(dadoslinha)
+                if TelaEditProd(dadoslinha):
+                    produtos = Sistema.Sistema.Bus_Prod()
+                    janelasys["tabela"].update(
+                        [id, nome, quant, Form_Preco(preco)]
+                        for id, nome, quant, preco in produtos
+                    )
             else:
                 popup_custom("Selecione um produto da tabela para editar!")
 
@@ -385,12 +390,12 @@ def TelaEditProd(dadoslinha):
         ],
         [
             sg.Column(
-                [[sg.Button("Editar", bind_return_key=True), sg.Button("Cancelar")]]
+                [[sg.Button("Confirmar", bind_return_key=True), sg.Button("Cancelar")]]
             )
         ],
     ]
 
-    janedit = sg.Window("Editar", layout)
+    janedit = sg.Window("Editar", layout, location=(1336, 420))
 
     while True:
         evento, valores = janedit.read()
@@ -412,6 +417,38 @@ def TelaEditProd(dadoslinha):
             digitado = valores["NovoQuant"]
             if not digitado.isdigit():
                 janedit["NovoQuant"].update(digitado[:-1])
+
+        if evento == "Confirmar":
+            retornopop = popup_custom_confirm(
+                f"Tem certeza que quer alterar o produto {dadoslinha[1]} ?"
+            )
+            if retornopop == "Sim":
+                id = dadoslinha[0]
+                NovoNome, NovoQuant, NovoPreco = (
+                    valores["NovoNome"],
+                    valores["NovoQuant"],
+                    valores["NovoPreco"],
+                )
+                retornoedit = Sistema.Sistema.Alt_Prod(
+                    id, NovoNome, NovoQuant, NovoPreco
+                )
+                if retornoedit == "nomevazio":
+                    popup_custom("Digite o novo nome do produto para alterar!")
+                elif retornoedit == "quantvazio":
+                    popup_custom("Digite a nova quantidade do produto para alterar!")
+                elif retornoedit == "precovazio":
+                    popup_custom("Digite o novo preço do produto para aterar!")
+                elif retornoedit == "Erro":
+                    popup_custom("Erro\nAlgo de errado aconteceu :(")
+                elif retornoedit == "AltConf":
+                    popup_custom(
+                        f"Produto {dadoslinha} alterado para {NovoNome,NovoQuant,NovoPreco} !"
+                    )
+                    janedit.close()
+                    return True
+
+            elif retornopop == "Não":
+                continue
 
 
 # Loop principal que executa as telas em ordem

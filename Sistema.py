@@ -80,8 +80,19 @@ class Sistema:
                 conexao.Cadastrar_Prod(nomep, quantp, precop)
                 conexao.fechar_conexao()
 
-    def Alt_Prod():
-        pass
+    def Alt_Prod(id, NovoNome, NovoQuant, NovoPreco):
+        if not NovoNome.strip():
+            return "nomevazio"
+        elif not NovoQuant.strip():
+            return "quantvazio"
+        elif not NovoPreco.strip():
+            return "precovazio"
+        else:
+            conexao = conecBD.conecBD()
+            if conexao.Update_Produtos(id, NovoNome, NovoQuant, NovoPreco):
+                return "AltConf"
+            else:
+                return "Erro"
 
     def Bus_Prod():
         conexao = conecBD.conecBD()
