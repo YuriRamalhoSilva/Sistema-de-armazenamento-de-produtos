@@ -156,6 +156,9 @@ class conecBD:
         except mysql.connector.Error as err:
             print(err)
 
+    def Update_Produtos(self, id, nome, quant, preco):
+        pass
+
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário
         self.cursor1.close()

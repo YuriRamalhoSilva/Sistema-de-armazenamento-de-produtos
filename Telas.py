@@ -307,7 +307,13 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                     pass
 
         if evento == "Editar Produto":
-            pass
+
+            linhaselec = valores["tabela"]  # Pega a linha selecionada
+            if linhaselec:
+                dadoslinha = produtos[linhaselec[0]]
+                TelaEditProd(dadoslinha)
+            else:
+                popup_custom("Selecione um produto da tabela para editar!")
 
         if evento == "Auto-Insert":
             pass
@@ -326,6 +332,86 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 [id, nome, quant, Form_Preco(preco)]
                 for id, nome, quant, preco in produtos
             )
+
+
+def TelaEditProd(dadoslinha):
+
+    layout = [
+        [sg.Text(f"Edição do Produto {dadoslinha[1]}")],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Text("Nome"),
+                        sg.Input(
+                            key="NovoNome",
+                            default_text=f"{dadoslinha[1]}",
+                            enable_events=True,
+                        ),
+                    ]
+                ],
+                justification="right",
+            )
+        ],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Text("Quantidade"),
+                        sg.Input(
+                            key="NovoQuant",
+                            default_text=f"{dadoslinha[2]}",
+                            enable_events=True,
+                        ),
+                    ]
+                ],
+                justification="right",
+            )
+        ],
+        [
+            sg.Column(
+                [
+                    [
+                        sg.Text("Preço"),
+                        sg.Input(
+                            key="NovoPreco",
+                            default_text=f"{dadoslinha[3]}",
+                            enable_events=True,
+                        ),
+                    ]
+                ],
+                justification="right",
+            )
+        ],
+        [
+            sg.Column(
+                [[sg.Button("Editar", bind_return_key=True), sg.Button("Cancelar")]]
+            )
+        ],
+    ]
+
+    janedit = sg.Window("Editar", layout)
+
+    while True:
+        evento, valores = janedit.read()
+
+        if evento in ("Cancelar", sg.WIN_CLOSED):
+            janedit.close()
+            return None
+
+        if evento == "NovoPreco":
+            digitado = valores["NovoPreco"]
+            if not (
+                digitado.replace(",", "", 1).replace(".", "", 1).isdigit()
+                and digitado.count(",") <= 1
+                and digitado.count(".") <= 1
+            ):
+                janedit["NovoPreco"].update(digitado[:-1])
+
+        if evento == "NovoQuant":
+            digitado = valores["NovoQuant"]
+            if not digitado.isdigit():
+                janedit["NovoQuant"].update(digitado[:-1])
 
 
 # Loop principal que executa as telas em ordem
