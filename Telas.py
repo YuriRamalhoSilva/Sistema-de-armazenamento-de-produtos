@@ -239,7 +239,7 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
         ],
     ]
     janelasys = sg.Window(
-        "Sistema", layout, size=(jan_largura, jan_altura), location=(px, py)
+        "Sistema", layout, size=(jan_largura, jan_altura), location=(px-300, py)
     )
 
     while True:
@@ -500,7 +500,7 @@ def TelaAnex():
         "Visualizador de Arquivo CSV",
         layout,
         size=(jan_largura, jan_altura),
-        location=(px + 600, py),
+        location=(px + 300, py),
     )
 
     while True:
