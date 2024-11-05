@@ -239,7 +239,7 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
         ],
     ]
     janelasys = sg.Window(
-        "Sistema", layout, size=(jan_largura, jan_altura), location=(px-300, py)
+        "Sistema", layout, size=(jan_largura, jan_altura), location=(px - 300, py)
     )
 
     while True:
@@ -501,6 +501,7 @@ def TelaAnex():
         layout,
         size=(jan_largura, jan_altura),
         location=(px + 300, py),
+        modal=True,
     )
 
     while True:
@@ -532,7 +533,10 @@ def TelaAnex():
                     sg.popup_error("Erro ao carregar o arquivo:", e)
 
         if evento == "Inserir Automaticamente":
-            pass
+            # Copiar o arquivo.csv pra pasta CadAuto
+            # Chamar o metodo do auto insert
+
+            break
     jananex.close()
 
 
