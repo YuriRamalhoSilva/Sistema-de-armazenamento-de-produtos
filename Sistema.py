@@ -1,4 +1,3 @@
-import Telas
 import conecBD
 import userprod.User
 import userprod.Produto
