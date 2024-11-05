@@ -1,6 +1,8 @@
 import PySimpleGUI as sg  # Importação da biblioteca de interface e apelidando de sg
+import CadAuto.autoinsert
 import Sistema
 import csv
+import CadAuto
 
 
 def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema todo
@@ -534,6 +536,7 @@ def TelaAnex():
 
         if evento == "Inserir Automaticamente":
             # Copiar o arquivo.csv pra pasta CadAuto
+            CadAuto.autoinsert.autoinsert.copy_file_to_CadAuto(caminho_arquivo)
             # Chamar o metodo do auto insert
 
             break
