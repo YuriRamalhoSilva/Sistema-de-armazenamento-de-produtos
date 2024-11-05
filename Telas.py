@@ -536,7 +536,7 @@ def TelaAnex():
 
         if evento == "Inserir Automaticamente":
             # Copiar o arquivo.csv pra pasta CadAuto
-            CadAuto.autoinsert.autoinsert.copy_file_to_CadAuto(caminho_arquivo)
+            CadAuto.autoinsert.autoinsert.Auto_Insert(caminho_arquivo)
             # Chamar o metodo do auto insert
 
             break
