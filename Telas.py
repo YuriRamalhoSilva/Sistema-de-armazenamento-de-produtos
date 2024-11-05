@@ -1,5 +1,6 @@
 import PySimpleGUI as sg  # Importação da biblioteca de interface e apelidando de sg
 import Sistema
+import csv
 
 
 def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema todo
@@ -324,6 +325,7 @@ def TelaSys():  # Função de funcionamento da Inserção de produtos e sua inte
                 popup_custom("Selecione um produto da tabela para editar!")
 
         if evento == "Auto-Insert":
+            TelaAnex()
             pass
 
         if evento == "Deslogar":
@@ -452,6 +454,86 @@ def TelaEditProd(dadoslinha):
 
             elif retornopop == "Não":
                 continue
+
+
+def TelaAnex():
+    res_largura, res_altura = sg.Window.get_screen_size()
+    jan_largura, jan_altura = 600, 620
+    px = (res_largura - jan_largura) // 2
+    py = (res_altura - jan_altura) // 2
+    layout = [
+        [
+            sg.Text("Anexar um arquivo CSV:"),
+            sg.Input(),
+            sg.FileBrowse(file_types=(("CSV Files", "*.csv"),)),
+        ],
+        [sg.Button("Carregar Arquivo"), sg.Button("Fechar")],
+        [
+            sg.Table(
+                auto_size_columns=False,
+                values=[[]],
+                headings=["NOME", "QUANTIDADE", "PREÇO"],
+                row_height=20,
+                select_mode=sg.TABLE_SELECT_MODE_BROWSE,
+                justification="center",
+                num_rows=23,
+                col_widths=[20, 20, 20],
+                key="-TABELA-",
+                enable_events=True,
+                background_color="white",
+                text_color="black",
+                visible=False,
+            )
+        ],
+        [
+            sg.Text(
+                "ATENÇÃO: O botao 'Inserir Automaticamente' insere esses dados na tabela principal!",
+                key="aviso",
+                visible=False,
+                enable_events=True,
+            )
+        ],
+        [sg.Button("Inserir Automaticamente", visible=False, enable_events=True)],
+    ]
+
+    jananex = sg.Window(
+        "Visualizador de Arquivo CSV",
+        layout,
+        size=(jan_largura, jan_altura),
+        location=(px + 600, py),
+    )
+
+    while True:
+        evento, valores = jananex.read()
+
+        if evento == sg.WINDOW_CLOSED or evento == "Fechar":
+            break
+
+        if evento == "Carregar Arquivo":
+            caminho_arquivo = valores[0]
+            if caminho_arquivo:
+                try:
+                    # Lê o arquivo CSV usando a biblioteca csv
+                    with open(caminho_arquivo, newline="") as arquivo:
+                        leitor = csv.reader(arquivo)
+                        dados_arquivo = list(leitor)
+
+                        # Ignora a primeira linha se for cabeçalho e carrega o restante dos dados
+                        dados_linha = (
+                            dados_arquivo[1:] if len(dados_arquivo) > 1 else []
+                        )
+
+                        # Atualiza a tabela com os dados do CSV
+                        jananex["-TABELA-"].update(values=dados_linha, visible=True)
+                        jananex["Inserir Automaticamente"].update(visible=True)
+                        jananex["aviso"].update(visible=True)
+
+                except Exception as e:
+                    sg.popup_error("Erro ao carregar o arquivo:", e)
+
+        if evento == "Inserir Automaticamente":
+            pass
+    jananex.close()
 
 
 # Loop principal que executa as telas em ordem
