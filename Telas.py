@@ -469,7 +469,7 @@ def TelaAnex():
             sg.Input(),
             sg.FileBrowse(file_types=(("CSV Files", "*.csv"),)),
         ],
-        [sg.Button("Carregar Arquivo"), sg.Button("Fechar")],
+        [sg.Button("Carregar Arquivo"), sg.Button("Voltar")],
         [
             sg.Table(
                 auto_size_columns=False,
@@ -509,8 +509,10 @@ def TelaAnex():
     while True:
         evento, valores = jananex.read()
 
-        if evento == sg.WINDOW_CLOSED or evento == "Fechar":
+        if evento == sg.WINDOW_CLOSED or evento == "Voltar":
+            jananex.close()
             break
+            
 
         if evento == "Carregar Arquivo":
             caminho_arquivo = valores[0]
@@ -520,7 +522,7 @@ def TelaAnex():
                     with open(caminho_arquivo, newline="") as arquivo:
                         leitor = csv.reader(arquivo)
                         dados_arquivo = list(leitor)
-
+    
                         # Ignora a primeira linha se for cabeçalho e carrega o restante dos dados
                         dados_linha = (
                             dados_arquivo[1:] if len(dados_arquivo) > 1 else []
@@ -535,12 +537,13 @@ def TelaAnex():
                     sg.popup_error("Erro ao carregar o arquivo:", e)
 
         if evento == "Inserir Automaticamente":
+            jananex.close()
             # Copiar o arquivo.csv pra pasta CadAuto
             CadAuto.autoinsert.autoinsert.Auto_Insert(caminho_arquivo)
             # Chamar o metodo do auto insert
-
+            
             break
-    jananex.close()
+    
 
 
 # Loop principal que executa as telas em ordem
