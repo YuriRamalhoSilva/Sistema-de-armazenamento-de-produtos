@@ -3,6 +3,7 @@ import CadAuto.autoinsert
 import Sistema
 import csv
 import CadAuto
+import threading
 
 
 def popup_custom(mensagem):  # Função que atribui uma bind ao popup do sistema todo
@@ -512,7 +513,6 @@ def TelaAnex():
         if evento == sg.WINDOW_CLOSED or evento == "Voltar":
             jananex.close()
             break
-            
 
         if evento == "Carregar Arquivo":
             caminho_arquivo = valores[0]
@@ -522,7 +522,7 @@ def TelaAnex():
                     with open(caminho_arquivo, newline="") as arquivo:
                         leitor = csv.reader(arquivo)
                         dados_arquivo = list(leitor)
-    
+
                         # Ignora a primeira linha se for cabeçalho e carrega o restante dos dados
                         dados_linha = (
                             dados_arquivo[1:] if len(dados_arquivo) > 1 else []
@@ -538,12 +538,16 @@ def TelaAnex():
 
         if evento == "Inserir Automaticamente":
             jananex.close()
+
             # Copiar o arquivo.csv pra pasta CadAuto
-            CadAuto.autoinsert.autoinsert.Auto_Insert(caminho_arquivo)
+            def exec_auto_insert():
+                CadAuto.autoinsert.autoinsert.Auto_Insert(caminho_arquivo)
+
             # Chamar o metodo do auto insert
-            
+            thread_do_autoinsert = threading.Thread(target=exec_auto_insert)
+            thread_do_autoinsert.start()
+
             break
-    
 
 
 # Loop principal que executa as telas em ordem
