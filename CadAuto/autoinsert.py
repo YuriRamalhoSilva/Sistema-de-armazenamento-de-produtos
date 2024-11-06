@@ -25,17 +25,15 @@ class autoinsert:
             next(leitor, None)
 
             for row in leitor:
-                ag.click(582,130,duration=3)
+                ag.click(249,148,duration=1)
                 nome = row[0]
                 pc.copy(nome)
-                sleep(1)
                 ag.hotkey('ctrl','v')
-                ag.press('tab')
+                ag.click(330,174,duration=1)
                 quantidade = int(row[1])
                 pc.copy(quantidade)
-                sleep(1)
                 ag.hotkey('ctrl','v')
-                ag.press('tab')
+                ag.click(322,200,duration=1)
                 preco = float(row[2])
                 pc.copy(preco)
                 sleep(1)
