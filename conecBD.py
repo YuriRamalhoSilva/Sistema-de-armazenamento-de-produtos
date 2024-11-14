@@ -174,6 +174,12 @@ class conecBD:
             print(err)
             return False
 
+    def Veri_Prod_Existe(self, nome):
+        self.cursor1.execute(
+            "SELECT ID_produto FROM table_products WHERE nome = %s", (nome,)
+        )
+        return self.cursor1.fetchone() is not None
+
     def fechar_conexao(self):
         # Função para fechar o cursor e a conexão quando for necessário
         self.cursor1.close()

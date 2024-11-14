@@ -56,3 +56,20 @@ class autoinsert:
                 ag.press("tab")
 
         pass
+
+    def Ler_planilha(caminho):
+        try:
+            dados = []
+            with open(caminho, mode="r", encoding="latin1") as arquivo:
+                leitor = csv.reader(arquivo)
+                next(leitor)
+                for linha in leitor:
+                    nome = linha[0]
+                    quantidade = int(linha[1])
+                    preco = float(linha[2])
+                    dados.append((nome, quantidade, preco))
+
+                return dados
+
+        except Exception as e:
+            print(e)
